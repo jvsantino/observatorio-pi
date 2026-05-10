@@ -12,6 +12,8 @@ export default function StudentDashboard() {
   const [erro, setErro] = useState('');
   const [loading, setLoading] = useState(false);
   const [visualizando, setVisualizando] = useState(null);
+  const [alunos, setAlunos] = useState([]);
+  const [participantes, setParticipantes] = useState([]);
 
   const carregarProjetos = async () => {
     try {
@@ -22,7 +24,14 @@ export default function StudentDashboard() {
     }
   };
 
-  useEffect(() => { if (user) carregarProjetos(); }, [user]);
+  useEffect(() => {
+    if (user) {
+      carregarProjetos();
+     api.get('/users/alunos').then(({ data }) => {
+  setAlunos(data.filter(u => u.id !== user.id));
+});
+    }
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,6 +40,7 @@ export default function StudentDashboard() {
       const formData = new FormData();
       Object.entries(form).forEach(([k, v]) => formData.append(k, v));
       if (arquivo) formData.append('arquivo_pdf', arquivo);
+      participantes.forEach(id => formData.append('participantes[]', id));
 
       if (editando) {
         await api.put(`/projects/${editando}`, formData);
@@ -42,6 +52,7 @@ export default function StudentDashboard() {
       }
       setForm({ titulo: '', descricao: '', curso: '', turma: '', periodo: '' });
       setArquivo(null);
+      setParticipantes([]);
       carregarProjetos();
     } catch (err) {
       setErro(err.response?.data?.error || 'Erro ao salvar projeto');
@@ -63,13 +74,11 @@ export default function StudentDashboard() {
 
   return (
     <div className="p-8 max-w-4xl mx-auto">
-      {/* Perfil */}
       <div className="bg-blue-800 text-white rounded-xl p-6 mb-8">
         <h1 className="text-2xl font-bold">{user?.nome}</h1>
         <p className="text-blue-200 capitalize">{user?.role} · {user?.email}</p>
       </div>
 
-      {/* Formulário */}
       <div className="bg-white rounded-xl shadow p-6 mb-8">
         <h2 className="text-lg font-semibold text-gray-700 mb-4">
           {editando ? 'Editar Projeto' : 'Publicar Novo Projeto'}
@@ -110,6 +119,25 @@ export default function StudentDashboard() {
             className="border rounded-lg px-3 py-2 text-sm"
             required={!editando}
           />
+          <div className="md:col-span-2">
+            <label className="text-sm text-gray-600 mb-1 block">Coparticipantes</label>
+            <div className="border rounded-lg p-3 max-h-32 overflow-y-auto space-y-1">
+              {alunos.length === 0 && <p className="text-gray-400 text-sm">Nenhum outro aluno cadastrado.</p>}
+              {alunos.map(a => (
+                <label key={a.id} className="flex items-center gap-2 text-sm cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={participantes.includes(a.id)}
+                    onChange={e => {
+                      if (e.target.checked) setParticipantes([...participantes, a.id]);
+                      else setParticipantes(participantes.filter(id => id !== a.id));
+                    }}
+                  />
+                  {a.nome} — {a.email}
+                </label>
+              ))}
+            </div>
+          </div>
           <div className="md:col-span-2 flex gap-2">
             <button type="submit" disabled={loading}
               className="flex-1 bg-blue-800 text-white py-2 rounded-lg hover:bg-blue-700 transition disabled:opacity-50">
@@ -127,7 +155,6 @@ export default function StudentDashboard() {
         {erro && <p className="mt-3 text-red-500 text-sm">{erro}</p>}
       </div>
 
-      {/* Lista de projetos */}
       <div className="bg-white rounded-xl shadow p-6">
         <h2 className="text-lg font-semibold text-gray-700 mb-4">Meus Projetos</h2>
         {projetos.length === 0 ? (
