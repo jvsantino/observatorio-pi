@@ -1,59 +1,102 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../services/firebase';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  if (user) {
-  const rotas = {
-    aluno: '/student',
-    professor: '/teacher',
-    administrador: '/admin',
-    coordenador: '/admin',
-  };
-  navigate(rotas[user.role] || '/');
-  return null;
-}
+  useEffect(() => {
+    if (user) {
+      const rotas = { aluno: '/student', professor: '/teacher', administrador: '/admin', coordenador: '/admin' };
+      navigate(rotas[user.role] || '/');
+    }
+  }, [user]);
 
   const handleLogin = async (e) => {
-  e.preventDefault();
-  setErro('');
-  try {
-    await signInWithEmailAndPassword(auth, email, senha);
-  } catch {
-    setErro('E-mail ou senha inválidos');
-  }
-};
+    e.preventDefault();
+    setErro('');
+    setLoading(true);
+    try {
+      await signInWithEmailAndPassword(auth, email, senha);
+    } catch {
+      setErro('E-mail ou senha inválidos');
+    }
+    setLoading(false);
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-sm">
-        <h2 className="text-2xl font-bold text-blue-800 mb-6 text-center">Entrar</h2>
-        <form onSubmit={handleLogin} className="space-y-4">
-          <input
-            type="email" placeholder="E-mail" value={email}
-            onChange={e => setEmail(e.target.value)}
-            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-          <input
-            type="password" placeholder="Senha" value={senha}
-            onChange={e => setSenha(e.target.value)}
-            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-          {erro && <p className="text-red-500 text-sm">{erro}</p>}
-          <button type="submit" className="w-full bg-blue-800 text-white py-2 rounded-lg hover:bg-blue-700 transition">
-            Entrar
-          </button>
-        </form>
+    <div className="min-h-screen flex" style={{ background: '#f0f4f8' }}>
+      {/* Painel esquerdo */}
+      <div style={{ background: '#004A8C' }} className="hidden md:flex md:w-1/2 flex-col items-center justify-center px-12 text-white">
+        <div style={{ background: '#F7941C' }} className="w-20 h-20 rounded-full flex items-center justify-center text-white font-bold text-3xl mb-8">
+          PI
+        </div>
+        <h2 className="text-3xl font-bold mb-3 text-center">Observatório PI</h2>
+        <p style={{ color: '#B8D4F0' }} className="text-center text-base max-w-sm">
+          Gerencie seus Projetos Integradores com organização, segurança e visibilidade profissional.
+        </p>
+        <div className="mt-12 space-y-4 w-full max-w-sm">
+          {['Submissão centralizada de projetos', 'Perfil acadêmico estilo Lattes', 'Avaliação integrada por professores'].map((item, i) => (
+            <div key={i} className="flex items-center gap-3">
+              <div style={{ background: '#F7941C' }} className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">✓</div>
+              <span style={{ color: '#B8D4F0' }} className="text-sm">{item}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Painel direito */}
+      <div className="flex-1 flex items-center justify-center px-6">
+        <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-sm">
+          <div className="text-center mb-8">
+            <div style={{ background: '#004A8C' }} className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-3">
+              PI
+            </div>
+            <h2 style={{ color: '#004A8C' }} className="text-2xl font-bold">Entrar</h2>
+            <p className="text-gray-400 text-sm mt-1">SENAC Pernambuco</p>
+          </div>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <label className="text-sm font-medium text-gray-600 block mb-1">E-mail</label>
+              <input
+                type="email" value={email}
+                onChange={e => setEmail(e.target.value)}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2"
+                style={{ '--tw-ring-color': '#004A8C' }}
+                placeholder="seu@email.com"
+                required
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-600 block mb-1">Senha</label>
+              <input
+                type="password" value={senha}
+                onChange={e => setSenha(e.target.value)}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2"
+                placeholder="••••••••"
+                required
+              />
+            </div>
+            {erro && <p className="text-red-500 text-sm">{erro}</p>}
+            <button
+              type="submit" disabled={loading}
+              style={{ background: '#004A8C' }}
+              className="w-full text-white py-2.5 rounded-lg font-semibold hover:opacity-90 transition disabled:opacity-50"
+            >
+              {loading ? 'Entrando...' : 'Entrar'}
+            </button>
+          </form>
+          <p className="text-center text-xs text-gray-400 mt-6">
+            Acesso apenas para usuários cadastrados pela coordenação.
+          </p>
+        </div>
       </div>
     </div>
   );
