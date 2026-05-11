@@ -51,13 +51,11 @@ export default function AdminDashboard() {
     <div style={{ background: '#f0f4f8', minHeight: '100vh' }} className="p-6">
       <div className="max-w-4xl mx-auto">
 
-        {/* Header */}
         <div className="mb-6">
           <h1 style={{ color: '#004A8C' }} className="text-2xl font-bold">Painel Administrativo</h1>
           <p className="text-gray-400 text-sm mt-1">Gerencie os usuários da plataforma</p>
         </div>
 
-        {/* Formulário */}
         <div className="bg-white rounded-2xl p-6 mb-6 shadow-sm">
           <div className="flex items-center gap-2 mb-5">
             <div style={{ background: '#F7941C' }} className="w-1 h-6 rounded-full"></div>
@@ -70,8 +68,7 @@ export default function AdminDashboard() {
                 type="text" value={form.nome}
                 onChange={e => setForm({ ...form, nome: e.target.value })}
                 className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400"
-                placeholder="Ex: João Silva"
-                required
+                placeholder="Ex: João Silva" required
               />
             </div>
             <div>
@@ -80,8 +77,7 @@ export default function AdminDashboard() {
                 type="email" value={form.email}
                 onChange={e => setForm({ ...form, email: e.target.value })}
                 className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400"
-                placeholder="Ex: joao@senac.br"
-                required
+                placeholder="Ex: joao@senac.br" required
               />
             </div>
             <div>
@@ -116,7 +112,6 @@ export default function AdminDashboard() {
           )}
         </div>
 
-        {/* Tabela */}
         <div className="bg-white rounded-2xl p-6 shadow-sm">
           <div className="flex items-center gap-2 mb-5">
             <div style={{ background: '#F7941C' }} className="w-1 h-6 rounded-full"></div>
@@ -134,8 +129,10 @@ export default function AdminDashboard() {
             {usuarios.map(u => (
               <div key={u.id} className="flex items-center justify-between p-3 rounded-xl border border-gray-100 hover:border-gray-200 transition">
                 <div className="flex items-center gap-3">
-                  <div style={{ background: '#E8F0FB', color: '#004A8C' }}
-                    className="w-9 h-9 rounded-full flex items-center justify-center font-semibold text-sm flex-shrink-0">
+                  <div
+                    style={{ background: '#E8F0FB', color: '#004A8C' }}
+                    className="w-9 h-9 rounded-full flex items-center justify-center font-semibold text-sm flex-shrink-0"
+                  >
                     {u.nome.charAt(0).toUpperCase()}
                   </div>
                   <div>
@@ -144,7 +141,6 @@ export default function AdminDashboard() {
                   </div>
                 </div>
                 <span
-                  style={roleColors[u.role] || { bg: '#f0f0f0', color: '#333' }}
                   className="text-xs font-medium px-3 py-1 rounded-full capitalize"
                   style={{ background: (roleColors[u.role] || {}).bg, color: (roleColors[u.role] || {}).color }}
                 >

@@ -8,6 +8,7 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [precisaTrocarSenha, setPrecisaTrocarSenha] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -15,11 +16,16 @@ export const AuthProvider = ({ children }) => {
         try {
           const { data } = await api.get('/auth/me');
           setUser(data);
+
+          const metadata = firebaseUser.metadata;
+          const primeiroLogin = metadata.creationTime === metadata.lastSignInTime;
+          setPrecisaTrocarSenha(primeiroLogin);
         } catch {
           setUser(null);
         }
       } else {
         setUser(null);
+        setPrecisaTrocarSenha(false);
       }
       setLoading(false);
     });
@@ -28,7 +34,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={{ user, loading, precisaTrocarSenha }}>
       {children}
     </AuthContext.Provider>
   );
