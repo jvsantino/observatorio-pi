@@ -16,10 +16,10 @@ export const AuthProvider = ({ children }) => {
         try {
           const { data } = await api.get('/auth/me');
           setUser(data);
-
-          const metadata = firebaseUser.metadata;
-          const primeiroLogin = metadata.creationTime === metadata.lastSignInTime;
-          setPrecisaTrocarSenha(primeiroLogin);
+          const criacao = new Date(firebaseUser.metadata.creationTime).getTime();
+          const ultimoLogin = new Date(firebaseUser.metadata.lastSignInTime).getTime();
+          const diffSegundos = Math.abs(ultimoLogin - criacao) / 1000;
+          setPrecisaTrocarSenha(diffSegundos < 30);
         } catch {
           setUser(null);
         }
@@ -29,7 +29,6 @@ export const AuthProvider = ({ children }) => {
       }
       setLoading(false);
     });
-
     return unsubscribe;
   }, []);
 
