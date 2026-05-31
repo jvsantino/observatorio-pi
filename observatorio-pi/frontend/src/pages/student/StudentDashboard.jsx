@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import api from '../../services/api';
 
+// URL base dos arquivos (backend), derivada da VITE_API_URL removendo o sufixo "/api"
+const FILES_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:3001/api').replace(/\/api\/?$/, '');
+
 export default function StudentDashboard() {
   const { user } = useAuth();
   const [projetos, setProjetos] = useState([]);
@@ -14,11 +17,33 @@ export default function StudentDashboard() {
   const [visualizando, setVisualizando] = useState(null);
   const [alunos, setAlunos] = useState([]);
   const [participantes, setParticipantes] = useState([]);
+  const [avaliacoes, setAvaliacoes] = useState({}); // { [projeto_id]: [avaliacao, ...] }
+
+  const statusInfo = (nota) => {
+    const n = parseFloat(nota);
+    if (n >= 7) return { label: 'Aprovado', bg: '#E8F5E9', color: '#2E7D32' };
+    if (n >= 5) return { label: 'Recuperação', bg: '#FFF3E0', color: '#E65100' };
+    return { label: 'Reprovado', bg: '#FFEBEE', color: '#C62828' };
+  };
 
   const carregarProjetos = async () => {
     try {
       const { data } = await api.get('/projects');
-      setProjetos(data.filter(p => p.autor_id === user.id));
+      const meus = data.filter(p => p.autor_id === user.id);
+      setProjetos(meus);
+
+      // Carrega as avaliações de cada projeto
+      const entradas = await Promise.all(
+        meus.map(async (p) => {
+          try {
+            const { data: avs } = await api.get(`/evaluations/project/${p.id}`);
+            return [p.id, avs];
+          } catch {
+            return [p.id, []];
+          }
+        })
+      );
+      setAvaliacoes(Object.fromEntries(entradas));
     } catch {
       console.error('Erro ao carregar projetos');
     }
@@ -214,47 +239,74 @@ export default function StudentDashboard() {
             </div>
           ) : (
             <div className="space-y-3">
-              {projetos.map(p => (
-                <div key={p.id} style={{ border: '1px solid #e5e7eb' }} className="rounded-xl p-4 hover:border-blue-200 transition">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 style={{ color: '#004A8C' }} className="font-semibold">{p.titulo}</h3>
-                      <p className="text-xs text-gray-400 mt-0.5">{p.curso} · {p.turma} · {p.periodo}</p>
-                      <p className="text-sm text-gray-500 mt-1">{p.descricao}</p>
+              {projetos.map(p => {
+                const avs = avaliacoes[p.id] || [];
+                return (
+                  <div key={p.id} style={{ border: '1px solid #e5e7eb' }} className="rounded-xl p-4 hover:border-blue-200 transition">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h3 style={{ color: '#004A8C' }} className="font-semibold">{p.titulo}</h3>
+                        <p className="text-xs text-gray-400 mt-0.5">{p.curso} · {p.turma} · {p.periodo}</p>
+                        <p className="text-sm text-gray-500 mt-1">{p.descricao}</p>
+                      </div>
+                      <div className="flex gap-2 ml-4 flex-shrink-0">
+                        <button
+                          onClick={() => setVisualizando(visualizando === p.id ? null : p.id)}
+                          style={{ background: '#E8F0FB', color: '#004A8C' }}
+                          className="text-xs px-3 py-1.5 rounded-lg font-medium hover:opacity-80 transition"
+                        >
+                          {visualizando === p.id ? 'Fechar' : 'Ver PDF'}
+                        </button>
+                        <button
+                          onClick={() => handleEditar(p)}
+                          style={{ background: '#FFF3E0', color: '#E65100' }}
+                          className="text-xs px-3 py-1.5 rounded-lg font-medium hover:opacity-80 transition"
+                        >
+                          Editar
+                        </button>
+                        <button
+                          onClick={() => handleExcluir(p.id)}
+                          style={{ background: '#FFEBEE', color: '#C62828' }}
+                          className="text-xs px-3 py-1.5 rounded-lg font-medium hover:opacity-80 transition"
+                        >
+                          Excluir
+                        </button>
+                      </div>
                     </div>
-                    <div className="flex gap-2 ml-4 flex-shrink-0">
-                      <button
-                        onClick={() => setVisualizando(visualizando === p.id ? null : p.id)}
-                        style={{ background: '#E8F0FB', color: '#004A8C' }}
-                        className="text-xs px-3 py-1.5 rounded-lg font-medium hover:opacity-80 transition"
-                      >
-                        {visualizando === p.id ? 'Fechar' : 'Ver PDF'}
-                      </button>
-                      <button
-                        onClick={() => handleEditar(p)}
-                        style={{ background: '#FFF3E0', color: '#E65100' }}
-                        className="text-xs px-3 py-1.5 rounded-lg font-medium hover:opacity-80 transition"
-                      >
-                        Editar
-                      </button>
-                      <button
-                        onClick={() => handleExcluir(p.id)}
-                        style={{ background: '#FFEBEE', color: '#C62828' }}
-                        className="text-xs px-3 py-1.5 rounded-lg font-medium hover:opacity-80 transition"
-                      >
-                        Excluir
-                      </button>
-                    </div>
+
+                    {/* Avaliações recebidas */}
+                    {avs.length > 0 && (
+                      <div className="mt-3 pt-3 border-t border-gray-100 space-y-2">
+                        {avs.map(a => {
+                          const s = statusInfo(a.nota);
+                          return (
+                            <div key={a.id} className="flex items-start gap-3">
+                              <div className="flex flex-col items-center flex-shrink-0">
+                                <span style={{ color: '#004A8C' }} className="text-lg font-bold leading-none">{parseFloat(a.nota).toFixed(1)}</span>
+                                <span style={{ background: s.bg, color: s.color }} className="mt-1 text-[10px] font-semibold px-2 py-0.5 rounded-full">
+                                  {s.label}
+                                </span>
+                              </div>
+                              <div className="text-sm">
+                                <p className="text-gray-700">{a.comentario || <span className="text-gray-400 italic">Sem comentário</span>}</p>
+                                {a.professor && <p className="text-xs text-gray-400 mt-0.5">Avaliado por {a.professor}</p>}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+
+                    {visualizando === p.id && (
+                      <iframe
+                        src={`${FILES_BASE}/uploads/${p.arquivo_pdf}`}
+                        className="w-full h-96 mt-4 rounded-lg border"
+                        title={p.titulo}
+                      />
+                    )}
                   </div>
-                  {visualizando === p.id && (
-                    <iframe
-                      src={`http://localhost:3001/uploads/${p.arquivo_pdf}`}
-                      className="w-full h-96 mt-4 rounded-lg border"
-                      title={p.titulo}
-                    />
-                  )}
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>

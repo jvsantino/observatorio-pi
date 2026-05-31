@@ -1,9 +1,1 @@
-export default function PDFViewer({ url }) {
-  return (
-    <iframe
-      src={url}
-      title="Visualizador de PDF"
-      className="w-full h-[80vh] border rounded"
-    />
-  );
-}
+const FILES_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:3001/api').replace(/\/api\/?$/, '');
