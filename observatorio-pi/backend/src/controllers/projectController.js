@@ -1,9 +1,34 @@
 const pool = require('../database/connection');
 
+// Normaliza a lista de participantes vinda do multipart (pode ser
+// "participantes[]" ou "participantes", string única, JSON ou array).
+function parseParticipantes(body) {
+  let p = body['participantes[]'];
+  if (p == null) p = body.participantes;
+  if (p == null) return [];
+  if (!Array.isArray(p)) {
+    if (typeof p === 'string') {
+      try { const j = JSON.parse(p); p = Array.isArray(j) ? j : [p]; }
+      catch { p = [p]; }
+    } else {
+      p = [p];
+    }
+  }
+  return p.map(Number).filter(n => Number.isInteger(n) && n > 0);
+}
+
 const listProjects = async (req, res) => {
   try {
     const { curso, turma, periodo } = req.query;
-    let query = 'SELECT p.*, u.nome AS autor FROM projetos p JOIN usuarios u ON p.autor_id = u.id WHERE 1=1';
+    let query = `
+      SELECT p.*, u.nome AS autor,
+        (SELECT GROUP_CONCAT(us.nome ORDER BY us.nome SEPARATOR ', ')
+           FROM projeto_alunos pa
+           JOIN usuarios us ON pa.aluno_id = us.id
+          WHERE pa.projeto_id = p.id AND pa.confirmado = TRUE) AS coparticipantes
+      FROM projetos p
+      JOIN usuarios u ON p.autor_id = u.id
+      WHERE 1=1`;
     const params = [];
 
     if (curso)   { query += ' AND p.curso = ?';   params.push(curso); }
@@ -35,19 +60,13 @@ const getProjectById = async (req, res) => {
 const createProject = async (req, res) => {
   try {
     const { titulo, descricao, curso, turma, periodo } = req.body;
-    // Cloudinary: a URL completa do arquivo vem em req.file.path
-    const arquivo_pdf = req.file?.path;
+    const arquivo_pdf = req.file?.path; // URL do Cloudinary
 
     if (!titulo || !descricao || !curso || !turma || !periodo || !arquivo_pdf) {
       return res.status(400).json({ error: 'Todos os campos são obrigatórios, incluindo o PDF' });
     }
 
-    // participantes pode chegar como array, string única ou JSON (multipart/form-data)
-    let participantes = req.body.participantes;
-    if (typeof participantes === 'string') {
-      try { participantes = JSON.parse(participantes); }
-      catch { participantes = participantes ? [participantes] : []; }
-    }
+    const participantes = parseParticipantes(req.body);
 
     const [result] = await pool.query(
       'INSERT INTO projetos (titulo, descricao, curso, turma, periodo, arquivo_pdf, autor_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
@@ -56,13 +75,13 @@ const createProject = async (req, res) => {
 
     const projectId = result.insertId;
 
-    if (Array.isArray(participantes)) {
-      for (const alunoId of participantes) {
-        await pool.query(
-          'INSERT IGNORE INTO projeto_alunos (projeto_id, aluno_id) VALUES (?, ?)',
-          [projectId, alunoId]
-        );
-      }
+    // Coparticipantes entram como PENDENTES (confirmado = FALSE por padrão)
+    for (const alunoId of participantes) {
+      if (alunoId === req.user.id) continue; // o autor não é coparticipante de si mesmo
+      await pool.query(
+        'INSERT IGNORE INTO projeto_alunos (projeto_id, aluno_id) VALUES (?, ?)',
+        [projectId, alunoId]
+      );
     }
 
     res.status(201).json({ message: 'Projeto criado', id: projectId });
@@ -75,7 +94,7 @@ const createProject = async (req, res) => {
 const updateProject = async (req, res) => {
   try {
     const { titulo, descricao, periodo } = req.body;
-    const arquivo_pdf = req.file?.path; // URL do Cloudinary, se um novo PDF foi enviado
+    const arquivo_pdf = req.file?.path;
 
     const [rows] = await pool.query('SELECT autor_id FROM projetos WHERE id = ?', [req.params.id]);
     if (rows.length === 0) return res.status(404).json({ error: 'Projeto não encontrado' });
@@ -116,4 +135,77 @@ const deleteProject = async (req, res) => {
   }
 };
 
-module.exports = { listProjects, getProjectById, createProject, updateProject, deleteProject };
+// Projetos em que o usuário logado foi convidado como coparticipante e AINDA NÃO confirmou
+const listInvites = async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      `SELECT p.id, p.titulo, p.descricao, p.curso, p.turma, p.periodo, p.arquivo_pdf, p.data_envio,
+              u.nome AS autor
+         FROM projeto_alunos pa
+         JOIN projetos p  ON pa.projeto_id = p.id
+         JOIN usuarios u  ON p.autor_id = u.id
+        WHERE pa.aluno_id = ? AND pa.confirmado = FALSE`,
+      [req.user.id]
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error('listInvites:', err);
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Projetos em que o usuário logado é coparticipante CONFIRMADO
+const listParticipations = async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      `SELECT p.id, p.titulo, p.descricao, p.curso, p.turma, p.periodo, p.arquivo_pdf, p.data_envio,
+              u.nome AS autor
+         FROM projeto_alunos pa
+         JOIN projetos p  ON pa.projeto_id = p.id
+         JOIN usuarios u  ON p.autor_id = u.id
+        WHERE pa.aluno_id = ? AND pa.confirmado = TRUE`,
+      [req.user.id]
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error('listParticipations:', err);
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Aceitar ou recusar um convite de coparticipação
+const respondInvite = async (req, res) => {
+  try {
+    const { acao } = req.body; // 'aceitar' | 'recusar'
+    const projetoId = req.params.id;
+
+    const [rows] = await pool.query(
+      'SELECT * FROM projeto_alunos WHERE projeto_id = ? AND aluno_id = ?',
+      [projetoId, req.user.id]
+    );
+    if (rows.length === 0) return res.status(404).json({ error: 'Convite não encontrado' });
+
+    if (acao === 'aceitar') {
+      await pool.query(
+        'UPDATE projeto_alunos SET confirmado = TRUE WHERE projeto_id = ? AND aluno_id = ?',
+        [projetoId, req.user.id]
+      );
+      return res.json({ message: 'Participação confirmada' });
+    } else if (acao === 'recusar') {
+      await pool.query(
+        'DELETE FROM projeto_alunos WHERE projeto_id = ? AND aluno_id = ?',
+        [projetoId, req.user.id]
+      );
+      return res.json({ message: 'Convite recusado' });
+    }
+    return res.status(400).json({ error: "Ação inválida (use 'aceitar' ou 'recusar')" });
+  } catch (err) {
+    console.error('respondInvite:', err);
+    res.status(500).json({ error: err.message });
+  }
+};
+
+module.exports = {
+  listProjects, getProjectById, createProject, updateProject, deleteProject,
+  listInvites, listParticipations, respondInvite,
+};

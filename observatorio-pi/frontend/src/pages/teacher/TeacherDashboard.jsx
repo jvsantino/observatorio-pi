@@ -95,6 +95,9 @@ export default function TeacherDashboard() {
                         </div>
                         <p className="text-xs text-gray-400">{p.autor} · {p.curso} · {p.turma} · {p.periodo}</p>
                         <p className="text-sm text-gray-500 mt-2">{p.descricao}</p>
+                        {p.coparticipantes && (
+                          <p className="text-xs text-gray-500 mt-1"><span className="font-medium" style={{ color: '#004A8C' }}>Coparticipantes:</span> {p.coparticipantes}</p>
+                        )}
                       </div>
                       <div className="flex gap-2 ml-4 flex-shrink-0">
                         <button
