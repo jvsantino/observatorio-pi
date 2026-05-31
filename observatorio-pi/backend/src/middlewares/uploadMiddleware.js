@@ -1,19 +1,21 @@
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('../config/cloudinary');
 
-const UPLOAD_DIR = process.env.UPLOAD_DIR || 'uploads';
-
-// Garante que a pasta de uploads exista (no Render/produção ela não vem do Git)
-fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, UPLOAD_DIR);
-  },
-  filename: (req, file, cb) => {
-    const unique = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-    cb(null, `${unique}${path.extname(file.originalname)}`);
+// Armazena os PDFs no Cloudinary.
+// PDF é tratado como resource_type "image" (padrão do Cloudinary), o que
+// permite a entrega inline com o content-type correto para abrir no navegador.
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'observatorio-pi',
+    resource_type: 'image',
+    format: 'pdf',
+    public_id: (req, file) => {
+      const unique = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+      const base = file.originalname.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9_-]/g, '_');
+      return `${unique}-${base}`;
+    },
   },
 });
 

@@ -35,7 +35,8 @@ const getProjectById = async (req, res) => {
 const createProject = async (req, res) => {
   try {
     const { titulo, descricao, curso, turma, periodo } = req.body;
-    const arquivo_pdf = req.file?.filename;
+    // Cloudinary: a URL completa do arquivo vem em req.file.path
+    const arquivo_pdf = req.file?.path;
 
     if (!titulo || !descricao || !curso || !turma || !periodo || !arquivo_pdf) {
       return res.status(400).json({ error: 'Todos os campos são obrigatórios, incluindo o PDF' });
@@ -74,7 +75,7 @@ const createProject = async (req, res) => {
 const updateProject = async (req, res) => {
   try {
     const { titulo, descricao, periodo } = req.body;
-    const arquivo_pdf = req.file?.filename;
+    const arquivo_pdf = req.file?.path; // URL do Cloudinary, se um novo PDF foi enviado
 
     const [rows] = await pool.query('SELECT autor_id FROM projetos WHERE id = ?', [req.params.id]);
     if (rows.length === 0) return res.status(404).json({ error: 'Projeto não encontrado' });
