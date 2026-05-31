@@ -5,6 +5,9 @@ import api from '../../services/api';
 // URL base dos arquivos (backend), derivada da VITE_API_URL removendo o sufixo "/api"
 const FILES_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:3001/api').replace(/\/api\/?$/, '');
 
+// Se arquivo_pdf já for uma URL completa (Cloudinary), usa direto; senão, mantém compat. com /uploads (legado)
+const pdfUrl = (arquivo) => /^https?:\/\//.test(arquivo || '') ? arquivo : `${FILES_BASE}/uploads/${arquivo}`;
+
 export default function StudentDashboard() {
   const { user } = useAuth();
   const [projetos, setProjetos] = useState([]);
@@ -299,7 +302,7 @@ export default function StudentDashboard() {
 
                     {visualizando === p.id && (
                       <iframe
-                        src={`${FILES_BASE}/uploads/${p.arquivo_pdf}`}
+                        src={pdfUrl(p.arquivo_pdf)}
                         className="w-full h-96 mt-4 rounded-lg border"
                         title={p.titulo}
                       />
