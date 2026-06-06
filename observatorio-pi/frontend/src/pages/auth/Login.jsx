@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../../services/firebase';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 
 export default function Login() {
@@ -19,7 +19,7 @@ export default function Login() {
 
   useEffect(() => {
     if (user) {
-      const rotas = { aluno: '/student', professor: '/teacher', administrador: '/admin', coordenador: '/admin' };
+      const rotas = { aluno: '/student', professor: '/teacher', administrador: '/admin', coordenador: '/admin', empresa: '/empresa' };
       navigate(rotas[user.role] || '/');
     }
   }, [user]);
@@ -118,8 +118,14 @@ export default function Login() {
               >
                 Esqueci minha senha
               </button>
+              <div className="mt-4 pt-4 border-t border-gray-100 text-center">
+                <p className="text-xs text-gray-400 mb-1">É uma empresa e quer conhecer os projetos?</p>
+                <Link to="/cadastro-empresa" className="text-sm font-medium hover:underline" style={{ color: '#F7941C' }}>
+                  Cadastrar empresa
+                </Link>
+              </div>
               <p className="text-center text-xs text-gray-400 mt-4">
-                Acesso apenas para usuários cadastrados pela coordenação.
+                Acesso de alunos e professores apenas via cadastro pela coordenação.
               </p>
             </>
           ) : (

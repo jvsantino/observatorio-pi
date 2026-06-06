@@ -1,0 +1,148 @@
+# DESAFIO POO - OS 4 PILARES DA PROGRAMAÇÃO ORIENTADA A OBJETOS
+# Aula de POO com Python - Prof. Guibson Santana
+# Aluno: João Victor Santino
+# ==============================================================
+# Pilares demonstrados neste código:
+#   - ABSTRAÇÃO      -> a classe Animal define "o QUE" um animal faz,
+#                       sem se preocupar com "COMO" cada um faz.
+#   - HERANÇA        -> Cachorro, Gato e Peixe herdam de Animal,
+#                       evitando repetir nome, idade e energia.
+#   - POLIMORFISMO   -> o método falar() tem comportamento diferente
+#                       em cada animal ("uma interface, várias formas").
+#   - ENCAPSULAMENTO -> o atributo __energia é privado e só pode ser
+#                       alterado através de métodos (regras).
+# ==============================================================
+
+
+# --------------------------------------------------------------
+# FASE 1 - DESPERTAR (HERANÇA) -> CLASSE PAI
+# Pergunta base: "Se todos os animais têm nome e idade,
+# faz sentido repetir isso em todas as classes?"
+# R= NÃO. Por isso colocamos tudo na classe pai Animal.
+# --------------------------------------------------------------
+class Animal:
+    def __init__(self, nome, idade):
+        # atributos comuns a TODOS os animais
+        self.nome = nome
+        self.idade = idade
+        self.__energia = 100          # ENCAPSULAMENTO: atributo privado
+
+    # --- ABSTRAÇÃO / POLIMORFISMO ---
+    # Método base: a ideia ("falar") existe para todo animal,
+    # mas cada filho vai dizer o seu próprio som.
+    def falar(self):
+        print(f"{self.nome} faz um som genérico...")
+
+    def apresentar(self):
+        print(f"Olá! Eu sou o(a) {self.nome} e tenho {self.idade} ano(s).")
+
+    def dormir(self):
+        self.__energia = 100
+        print(f"{self.nome} dormiu e recuperou toda a energia.")
+
+    # --- ENCAPSULAMENTO: acesso controlado à energia ---
+    def mostrar_energia(self):
+        print(f"A energia de {self.nome} é: {self.__energia}")
+
+    def gastar_energia(self, valor):
+        # regra: só gasta energia se tiver o suficiente
+        if valor <= self.__energia:
+            self.__energia -= valor
+            print(f"{self.nome} gastou {valor} de energia.")
+        else:
+            print(f"{self.nome} está cansado demais! Energia insuficiente.")
+
+
+# --------------------------------------------------------------
+# FASE 1 + FASE 2 - SUBCLASSES (HERANÇA + POLIMORFISMO)
+# Cada filho herda do pai e reescreve o método falar().
+# --------------------------------------------------------------
+class Cachorro(Animal):
+    def falar(self):                       # POLIMORFISMO
+        print(f"{self.nome} diz: Au au!")
+
+    def buscar_bolinha(self):              # comportamento próprio
+        print(f"{self.nome} foi buscar a bolinha!")
+        self.gastar_energia(15)
+
+
+class Gato(Animal):
+    def falar(self):                       # POLIMORFISMO
+        print(f"{self.nome} diz: Miau!")
+
+    def arranhar_sofa(self):               # comportamento próprio
+        print(f"{self.nome} arranhou o sofá... ops!")
+        self.gastar_energia(10)
+
+
+# --------------------------------------------------------------
+# DESAFIO FINAL - "AGORA É PARA VALER": CLASSE PEIXE
+# Requisitos: método diferente, atributos diferentes
+# e comportamentos próprios.
+# --------------------------------------------------------------
+class Peixe(Animal):
+    def __init__(self, nome, idade, tipo_agua):
+        super().__init__(nome, idade)      # HERANÇA: reaproveita o pai
+        self.tipo_agua = tipo_agua         # atributo DIFERENTE dos outros
+
+    def falar(self):                       # POLIMORFISMO (peixe fala do seu jeito)
+        print(f"{self.nome} faz: Blub blub...")
+
+    def nadar(self):                       # comportamento PRÓPRIO
+        print(f"{self.nome} está nadando na água {self.tipo_agua}.")
+        self.gastar_energia(5)
+
+
+# ==============================================================
+# ÁREA DE TESTES - aqui criamos os objetos e testamos tudo
+# ==============================================================
+if __name__ == "__main__":
+
+    print("=" * 55)
+    print("FASE 1 - HERANÇA: criando e testando os objetos")
+    print("=" * 55)
+    saturno = Cachorro("Saturno", 3)
+    jupira = Gato("Jupira", 2)
+
+    saturno.apresentar()        # método herdado da classe pai
+    jupira.apresentar()         # método herdado da classe pai
+    saturno.buscar_bolinha()    # método próprio do Cachorro
+    jupira.arranhar_sofa()      # método próprio do Gato
+
+    print()
+    print("=" * 55)
+    print("FASE 2 - POLIMORFISMO: mesmo método, sons diferentes")
+    print("=" * 55)
+    nemo = Peixe("Nemo", 1, "salgada")
+    generico = Animal("Bicho", 5)
+
+    # lista com objetos diferentes -> o mesmo a.falar() responde diferente
+    animais = [saturno, jupira, nemo, generico]
+    for a in animais:
+        a.falar()
+
+    print()
+    print("=" * 55)
+    print("FASE 3 - ENCAPSULAMENTO: protegendo a energia")
+    print("=" * 55)
+    saturno.mostrar_energia()       # forma CORRETA de ver a energia
+    saturno.gastar_energia(30)      # forma CORRETA de alterar
+    saturno.mostrar_energia()
+    saturno.gastar_energia(999)     # a regra impede gastar mais do que tem
+
+    # Testando o acesso DIRETO ao atributo privado (vai falhar)
+    print("\nTentando acessar a energia direto com saturno.__energia:")
+    try:
+        print(saturno.__energia)
+    except AttributeError:
+        print(">> ERRO! Não dá pra acessar __energia direto. Está protegido!")
+
+    print()
+    print("=" * 55)
+    print("DESAFIO FINAL - classe Peixe em ação")
+    print("=" * 55)
+    nemo.apresentar()
+    nemo.falar()
+    nemo.nadar()
+    nemo.mostrar_energia()
+    print(f"Curiosidade: o {nemo.nome} vive em água {nemo.tipo_agua}.")

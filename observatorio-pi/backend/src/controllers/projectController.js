@@ -126,6 +126,7 @@ const deleteProject = async (req, res) => {
 
     // Remove dependências antes do projeto (evita falha de chave estrangeira)
     await pool.query('DELETE FROM avaliacoes WHERE projeto_id = ?', [req.params.id]);
+    await pool.query('DELETE FROM avaliacoes_empresa WHERE projeto_id = ?', [req.params.id]);
     await pool.query('DELETE FROM projeto_alunos WHERE projeto_id = ?', [req.params.id]);
     await pool.query('DELETE FROM projetos WHERE id = ?', [req.params.id]);
     res.json({ message: 'Projeto excluído' });

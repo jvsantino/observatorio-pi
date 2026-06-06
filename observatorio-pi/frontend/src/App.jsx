@@ -6,9 +6,11 @@ import { useAuth } from './hooks/useAuth';
 import Home from './pages/Home';
 import Login from './pages/auth/Login';
 import TrocarSenha from './pages/auth/TrocarSenha';
+import RegisterEmpresa from './pages/auth/RegisterEmpresa';
 import StudentDashboard from './pages/student/StudentDashboard';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import TeacherDashboard from './pages/teacher/TeacherDashboard';
+import CompanyDashboard from './pages/company/CompanyDashboard';
 
 const SENHA_PADRAO = 'Trocar@123';
 
@@ -21,6 +23,7 @@ function AppRoutes() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/cadastro-empresa" element={<RegisterEmpresa />} />
       <Route path="/trocar-senha" element={
         <PrivateRoute>
           <TrocarSenha />
@@ -39,6 +42,11 @@ function AppRoutes() {
       <Route path="/teacher" element={
         <PrivateRoute roles={['professor']}>
           <TeacherDashboard />
+        </PrivateRoute>
+      } />
+      <Route path="/empresa" element={
+        <PrivateRoute roles={['empresa']}>
+          <CompanyDashboard />
         </PrivateRoute>
       } />
     </Routes>
