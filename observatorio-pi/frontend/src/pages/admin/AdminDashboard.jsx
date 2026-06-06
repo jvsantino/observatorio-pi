@@ -7,6 +7,7 @@ export default function AdminDashboard() {
   const [mensagem, setMensagem] = useState('');
   const [erro, setErro] = useState('');
   const [loading, setLoading] = useState(false);
+  const [pendentes, setPendentes] = useState([]);
 
   const roles = [
     { id: 1, nome: 'Administrador' },
@@ -24,7 +25,28 @@ export default function AdminDashboard() {
     }
   };
 
-  useEffect(() => { carregarUsuarios(); }, []);
+  const carregarPendentes = async () => {
+    try {
+      const { data } = await api.get('/users/empresas-pendentes');
+      setPendentes(data);
+    } catch {
+      console.error('Erro ao carregar empresas pendentes');
+    }
+  };
+
+  const aprovarEmpresa = async (id) => {
+    await api.put(`/users/${id}/aprovar`);
+    setMensagem('Empresa aprovada com sucesso!');
+    carregarPendentes(); carregarUsuarios();
+  };
+
+  const recusarEmpresa = async (id) => {
+    if (!confirm('Recusar e remover esta empresa?')) return;
+    await api.delete(`/users/empresa/${id}`);
+    carregarPendentes();
+  };
+
+  useEffect(() => { carregarUsuarios(); carregarPendentes(); }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,6 +67,7 @@ export default function AdminDashboard() {
     coordenador:   { bg: '#FFF3E0', color: '#E65100' },
     professor:     { bg: '#E8F5E9', color: '#2E7D32' },
     aluno:         { bg: '#F3E5F5', color: '#6A1B9A' },
+    empresa:       { bg: '#FFF8EE', color: '#E65100' },
   };
 
   return (
@@ -111,6 +134,34 @@ export default function AdminDashboard() {
             </div>
           )}
         </div>
+
+        {pendentes.length > 0 && (
+          <div className="bg-white rounded-2xl p-6 mb-6 shadow-sm">
+            <div className="flex items-center gap-2 mb-5">
+              <div style={{ background: '#F7941C' }} className="w-1 h-6 rounded-full"></div>
+              <h2 style={{ color: '#004A8C' }} className="font-semibold text-lg">
+                Empresas Pendentes de Aprovação
+                <span style={{ background: '#FFF3E0', color: '#E65100' }} className="ml-2 text-xs font-medium px-2 py-0.5 rounded-full">{pendentes.length}</span>
+              </h2>
+            </div>
+            <div className="space-y-2">
+              {pendentes.map(emp => (
+                <div key={emp.id} className="flex items-center justify-between p-3 rounded-xl border border-gray-100">
+                  <div>
+                    <p className="text-sm font-medium text-gray-800">{emp.nome}</p>
+                    <p className="text-xs text-gray-400">{emp.email} · CNPJ: {emp.cnpj}</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <button onClick={() => aprovarEmpresa(emp.id)} style={{ background: '#E8F5E9', color: '#2E7D32' }}
+                      className="text-xs px-3 py-1.5 rounded-lg font-medium hover:opacity-80 transition">Aprovar</button>
+                    <button onClick={() => recusarEmpresa(emp.id)} style={{ background: '#FFEBEE', color: '#C62828' }}
+                      className="text-xs px-3 py-1.5 rounded-lg font-medium hover:opacity-80 transition">Recusar</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="bg-white rounded-2xl p-6 shadow-sm">
           <div className="flex items-center gap-2 mb-5">

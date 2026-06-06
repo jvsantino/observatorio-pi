@@ -54,7 +54,10 @@ export default function CompanyDashboard() {
     }
   };
 
-  useEffect(() => { carregar(); }, []);
+  useEffect(() => {
+    // Só carrega os dados se a empresa estiver aprovada
+    if (user && (user.aprovado === 1 || user.aprovado === true)) carregar();
+  }, [user]);
 
   const setCampo = (pid, campo, valor) =>
     setForm(f => ({ ...f, [pid]: { ...f[pid], [campo]: valor } }));
@@ -81,6 +84,26 @@ export default function CompanyDashboard() {
       setErro(err.response?.data?.error || 'Erro ao buscar contatos');
     }
   };
+
+  // Empresa ainda não aprovada pela coordenação
+  if (user && (user.aprovado === 0 || user.aprovado === false)) {
+    return (
+      <div style={{ background: '#f0f4f8', minHeight: '100vh' }} className="p-6">
+        <div className="max-w-xl mx-auto">
+          <div className="bg-white rounded-2xl p-10 mt-10 text-center shadow-sm">
+            <div className="text-5xl mb-4">⏳</div>
+            <h1 style={{ color: '#004A8C' }} className="text-2xl font-bold mb-2">Cadastro em análise</h1>
+            <p className="text-gray-500 text-sm">
+              Olá, <span className="font-medium">{user?.nome}</span>! Sua conta de empresa foi recebida e está
+              <span className="font-medium"> aguardando aprovação da coordenação</span>. Assim que for liberada,
+              você poderá acessar os projetos, avaliar e entrar em contato com os alunos.
+            </p>
+            <p className="text-gray-400 text-xs mt-4">Tente novamente mais tarde fazendo login.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ background: '#f0f4f8', minHeight: '100vh' }} className="p-6">
