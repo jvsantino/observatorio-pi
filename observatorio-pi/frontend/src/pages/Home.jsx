@@ -11,9 +11,7 @@ export default function Home() {
     <div className="min-h-screen md:h-[calc(100vh_-_3.5rem)] flex flex-col md:overflow-hidden" style={{ background: '#f0f4f8' }}>
       {/* Hero */}
       <div style={{ background: '#004A8C' }} className="flex-1 flex flex-col items-center justify-center text-center px-6 py-4">
-        <div style={{ background: '#F7941C' }} className="w-12 h-12 lg:w-16 lg:h-16 rounded-full flex items-center justify-center text-white font-bold text-lg lg:text-2xl mb-3 mx-auto">
-          PI
-        </div>
+        <img src="/logo.jpg" alt="Observatório PI" className="w-16 h-16 lg:w-20 lg:h-20 rounded-2xl object-cover mb-3 mx-auto shadow-lg" />
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3">
           Observatório de Projetos Integradores
         </h1>

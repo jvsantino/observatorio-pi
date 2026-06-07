@@ -15,9 +15,7 @@ export default function Navbar() {
   return (
     <nav style={{ background: '#004A8C' }} className="text-white h-14 px-6 flex items-center justify-between shadow-md">
       <Link to="/" className="flex items-center gap-3">
-        <div style={{ background: '#F7941C' }} className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-white text-sm flex-shrink-0">
-          PI
-        </div>
+        <img src="/logo.jpg" alt="Observatório PI" className="w-9 h-9 rounded-lg object-cover flex-shrink-0" />
         <div className="leading-tight">
           <span className="font-bold text-white text-sm sm:text-base leading-none block">Observatório PI</span>
           <span className="text-xs leading-none" style={{ color: '#B8D4F0' }}>SENAC Pernambuco</span>

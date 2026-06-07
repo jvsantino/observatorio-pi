@@ -74,7 +74,7 @@ export default function RegisterEmpresa() {
   return (
     <div className="min-h-screen flex" style={{ background: '#f0f4f8' }}>
       <div style={{ background: '#004A8C' }} className="hidden md:flex md:w-1/2 flex-col items-center justify-center px-12 text-white">
-        <div style={{ background: '#F7941C' }} className="w-20 h-20 rounded-full flex items-center justify-center text-white font-bold text-3xl mb-8">PI</div>
+        <img src="/logo.jpg" alt="Observatório PI" className="w-28 h-28 rounded-2xl object-cover mb-6 shadow-lg" />
         <h2 className="text-3xl font-bold mb-3 text-center">Portal das Empresas</h2>
         <p style={{ color: '#B8D4F0' }} className="text-center text-base max-w-sm">
           Conheça os Projetos Integradores dos nossos alunos, avalie os trabalhos e conecte-se com os talentos.
@@ -92,7 +92,7 @@ export default function RegisterEmpresa() {
       <div className="flex-1 flex items-center justify-center px-6 py-8">
         <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-sm">
           <div className="text-center mb-6">
-            <div style={{ background: '#004A8C' }} className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-3">PI</div>
+            <img src="/logo.jpg" alt="Observatório PI" className="w-16 h-16 rounded-xl object-cover mx-auto mb-3" />
             <h2 style={{ color: '#004A8C' }} className="text-2xl font-bold">Cadastro de Empresa</h2>
             <p className="text-gray-400 text-sm mt-1">Crie sua conta para acessar os projetos</p>
           </div>

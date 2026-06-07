@@ -53,9 +53,7 @@ export default function Login() {
     <div className="min-h-screen flex" style={{ background: '#f0f4f8' }}>
       {/* Painel esquerdo */}
       <div style={{ background: '#004A8C' }} className="hidden md:flex md:w-1/2 flex-col items-center justify-center px-12 text-white">
-        <div style={{ background: '#F7941C' }} className="w-20 h-20 rounded-full flex items-center justify-center text-white font-bold text-3xl mb-8">
-          PI
-        </div>
+        <img src="/logo.jpg" alt="Observatório PI" className="w-28 h-28 rounded-2xl object-cover mb-6 shadow-lg" />
         <h2 className="text-3xl font-bold mb-3 text-center">Observatório PI</h2>
         <p style={{ color: '#B8D4F0' }} className="text-center text-base max-w-sm">
           Gerencie seus Projetos Integradores com organização, segurança e visibilidade profissional.
@@ -77,9 +75,7 @@ export default function Login() {
           {!mostrarReset ? (
             <>
               <div className="text-center mb-8">
-                <div style={{ background: '#004A8C' }} className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-3">
-                  PI
-                </div>
+                <img src="/logo.jpg" alt="Observatório PI" className="w-16 h-16 rounded-xl object-cover mx-auto mb-3" />
                 <h2 style={{ color: '#004A8C' }} className="text-2xl font-bold">Entrar</h2>
                 <p className="text-gray-400 text-sm mt-1">SENAC Pernambuco</p>
               </div>
