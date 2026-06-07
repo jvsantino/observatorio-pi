@@ -90,7 +90,7 @@ export default function CompanyDashboard() {
     return (
       <div style={{ background: '#f0f4f8', minHeight: '100vh' }} className="p-6">
         <div className="max-w-xl mx-auto">
-          <div className="bg-white rounded-2xl p-10 mt-10 text-center shadow-sm">
+          <div className="bg-[#F8FAFC] rounded-2xl p-10 mt-10 text-center shadow-sm">
             <div className="text-5xl mb-4">⏳</div>
             <h1 style={{ color: '#004A8C' }} className="text-2xl font-bold mb-2">Cadastro em análise</h1>
             <p className="text-gray-500 text-sm">
@@ -125,7 +125,7 @@ export default function CompanyDashboard() {
         {erro && <div style={{ background: '#FFEBEE', color: '#C62828' }} className="mb-4 p-3 rounded-lg text-sm">✕ {erro}</div>}
 
         {projetos.length === 0 ? (
-          <div className="bg-white rounded-2xl p-12 text-center shadow-sm">
+          <div className="bg-[#F8FAFC] rounded-2xl p-12 text-center shadow-sm">
             <div className="text-4xl mb-3">🔍</div>
             <p className="text-gray-400 text-sm">Nenhum projeto disponível no momento.</p>
           </div>
@@ -136,7 +136,7 @@ export default function CompanyDashboard() {
               const rs = ratings[p.id] || [];
               const cs = contatos[p.id];
               return (
-                <div key={p.id} className="bg-white rounded-2xl shadow-sm p-5">
+                <div key={p.id} className="bg-[#F8FAFC] rounded-2xl shadow-sm p-5">
                   <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-start">
                     <div className="flex-1">
                       <h3 style={{ color: '#004A8C' }} className="font-semibold text-lg">{p.titulo}</h3>

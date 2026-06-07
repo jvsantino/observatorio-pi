@@ -76,7 +76,7 @@ export default function TeacherDashboard() {
         {erro && <div style={{ background: '#FFEBEE', color: '#C62828' }} className="mb-4 p-3 rounded-lg text-sm">✕ {erro}</div>}
 
         {projetos.length === 0 ? (
-          <div className="bg-white rounded-2xl p-12 text-center shadow-sm">
+          <div className="bg-[#F8FAFC] rounded-2xl p-12 text-center shadow-sm">
             <div className="text-4xl mb-3">📋</div>
             <p className="text-gray-400 text-sm">Nenhum projeto disponível para avaliação.</p>
           </div>
@@ -86,7 +86,7 @@ export default function TeacherDashboard() {
               const avs = avaliacoes[p.id] || [];
               const jaAvaliado = avs.length > 0;
               return (
-                <div key={p.id} className="bg-white rounded-2xl shadow-sm overflow-hidden">
+                <div key={p.id} className="bg-[#F8FAFC] rounded-2xl shadow-sm overflow-hidden">
                   <div className="p-5">
                     <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-start">
                       <div className="flex-1">

@@ -79,7 +79,7 @@ export default function AdminDashboard() {
           <p className="text-gray-400 text-sm mt-1">Gerencie os usuários da plataforma</p>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 mb-6 shadow-sm">
+        <div className="bg-[#F8FAFC] rounded-2xl p-6 mb-6 shadow-sm">
           <div className="flex items-center gap-2 mb-5">
             <div style={{ background: '#F7941C' }} className="w-1 h-6 rounded-full"></div>
             <h2 style={{ color: '#004A8C' }} className="font-semibold text-lg">Cadastrar Novo Usuário</h2>
@@ -136,7 +136,7 @@ export default function AdminDashboard() {
         </div>
 
         {pendentes.length > 0 && (
-          <div className="bg-white rounded-2xl p-6 mb-6 shadow-sm">
+          <div className="bg-[#F8FAFC] rounded-2xl p-6 mb-6 shadow-sm">
             <div className="flex items-center gap-2 mb-5">
               <div style={{ background: '#F7941C' }} className="w-1 h-6 rounded-full"></div>
               <h2 style={{ color: '#004A8C' }} className="font-semibold text-lg">
@@ -163,7 +163,7 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        <div className="bg-white rounded-2xl p-6 shadow-sm">
+        <div className="bg-[#F8FAFC] rounded-2xl p-6 shadow-sm">
           <div className="flex items-center gap-2 mb-5">
             <div style={{ background: '#F7941C' }} className="w-1 h-6 rounded-full"></div>
             <h2 style={{ color: '#004A8C' }} className="font-semibold text-lg">

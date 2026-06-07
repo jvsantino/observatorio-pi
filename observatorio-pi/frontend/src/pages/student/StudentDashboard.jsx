@@ -212,7 +212,7 @@ export default function StudentDashboard() {
 
           {/* Coluna esquerda — menu */}
           <aside className="md:w-60 lg:w-64 flex-shrink-0">
-            <nav className="bg-white rounded-2xl p-3 shadow-sm flex md:flex-col gap-2 overflow-x-auto">
+            <nav className="bg-[#F8FAFC] rounded-2xl p-3 shadow-sm flex md:flex-col gap-2 overflow-x-auto">
               {menu.map(item => {
                 const ativo = aba === item.id;
                 return (
@@ -241,7 +241,7 @@ export default function StudentDashboard() {
 
             {/* Publicar / Editar */}
             {aba === 'publicar' && (
-              <div className="bg-white rounded-2xl p-6 shadow-sm">
+              <div className="bg-[#F8FAFC] rounded-2xl p-6 shadow-sm">
                 {tituloSecao(editando ? 'Editar Projeto' : 'Publicar Novo Projeto')}
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div className="md:col-span-2">
@@ -318,7 +318,7 @@ export default function StudentDashboard() {
 
             {/* Meus Projetos */}
             {aba === 'projetos' && (
-              <div className="bg-white rounded-2xl p-6 shadow-sm">
+              <div className="bg-[#F8FAFC] rounded-2xl p-6 shadow-sm">
                 {tituloSecao('Meus Projetos')}
                 {projetos.length === 0 ? (
                   <div className="text-center py-12">
@@ -333,7 +333,7 @@ export default function StudentDashboard() {
 
             {/* Minhas Participações */}
             {aba === 'participacoes' && (
-              <div className="bg-white rounded-2xl p-6 shadow-sm">
+              <div className="bg-[#F8FAFC] rounded-2xl p-6 shadow-sm">
                 {tituloSecao('Minhas Participações')}
                 {participacoes.length === 0 ? (
                   <div className="text-center py-12">
@@ -348,7 +348,7 @@ export default function StudentDashboard() {
 
             {/* Convites */}
             {aba === 'convites' && (
-              <div className="bg-white rounded-2xl p-6 shadow-sm">
+              <div className="bg-[#F8FAFC] rounded-2xl p-6 shadow-sm">
                 {tituloSecao('Convites de Participação')}
                 {convites.length === 0 ? (
                   <div className="text-center py-12">
