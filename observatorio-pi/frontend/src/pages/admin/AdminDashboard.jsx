@@ -179,20 +179,20 @@ export default function AdminDashboard() {
             )}
             {usuarios.map(u => (
               <div key={u.id} className="flex items-center justify-between p-3 rounded-xl border border-gray-100 hover:border-gray-200 transition">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 min-w-0 flex-1">
                   <div
                     style={{ background: '#E8F0FB', color: '#004A8C' }}
                     className="w-9 h-9 rounded-full flex items-center justify-center font-semibold text-sm flex-shrink-0"
                   >
                     {u.nome.charAt(0).toUpperCase()}
                   </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800">{u.nome}</p>
-                    <p className="text-xs text-gray-400">{u.email}</p>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-gray-800 truncate">{u.nome}</p>
+                    <p className="text-xs text-gray-400 truncate">{u.email}</p>
                   </div>
                 </div>
                 <span
-                  className="text-xs font-medium px-3 py-1 rounded-full capitalize"
+                  className="text-xs font-medium px-3 py-1 rounded-full capitalize flex-shrink-0 ml-2 whitespace-nowrap"
                   style={{ background: (roleColors[u.role] || {}).bg, color: (roleColors[u.role] || {}).color }}
                 >
                   {u.role}
