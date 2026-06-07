@@ -1,3 +1,6 @@
+* [Read in English](
+* [Leia em Português](https://github.com/jvsantino/observatorio-pi/edit/main/README.md#observat%C3%B3rio-de-projetos-integradores)
+
 # Observatório de Projetos Integradores
 
 > Plataforma acadêmica desenvolvida para centralizar, organizar, avaliar e divulgar Projetos Integradores do Centro Universitário SENAC Pernambuco.
@@ -186,3 +189,202 @@ Principais entidades do sistema:
 ## Licença
 
 Projeto acadêmico desenvolvido para fins educacionais no Centro Universitário SENAC Pernambuco.
+
+
+-----
+-----
+# Integrative Projects Observatory
+
+> Academic platform designed to centralize, manage, evaluate and showcase Integrative Projects developed by students at SENAC Pernambuco.
+
+
+
+
+\
+
+---
+
+##  Live Demo
+
+Access the platform:
+
+https://observatorio-pi-blond.vercel.app/
+
+---
+
+## About the Project
+
+The Integrative Projects Observatory was developed to replace the traditional process of submitting academic projects through email and Microsoft Teams, centralizing the entire workflow into a single platform.
+
+Inspired by the Brazilian Lattes Platform, the system allows each student to maintain an academic profile where projects are published, evaluated and linked to collaborators.
+
+The platform also connects companies with academic projects, creating opportunities for visibility, networking and talent discovery.
+
+---
+
+## Main Features
+
+### Authentication & Security
+
+* Firebase Authentication
+* JWT-based authentication
+* Role-Based Access Control (RBAC)
+* Protected frontend and backend routes
+* Mandatory password change on first login
+
+### Student Area
+
+* Academic profile inspired by Lattes
+* Project submission and publishing
+* PDF file upload
+* Project editing and deletion
+* Inline PDF visualization
+* Access to project evaluations
+* Co-participation management
+
+### Co-Participation System
+
+* Invite collaborators to projects
+* Accept or reject participation requests
+* "My Participations" area
+* Only confirmed participants are displayed
+
+### Professor Area
+
+* Complete project listing
+* Project evaluation (0–10 score)
+* Evaluation comments
+* Automatic status generation:
+
+  * 🟢 Approved
+  * 🟡 Recovery
+  * 🔴 Failed
+
+### Company Portal
+
+* Company self-registration
+* CNPJ validation
+* Coordinator approval workflow
+* Project rating system (0–5 stars)
+* Project comments
+* Interest expression feature
+* Access to student contact information
+
+### Administration Panel
+
+* User management
+* Role management
+* Company approval process
+* Institutional platform administration
+
+---
+
+## User Roles
+
+| Role          | Responsibilities                        |
+| ------------- | --------------------------------------- |
+| Administrator | Full platform management                |
+| Coordinator   | Company approval and monitoring         |
+| Professor     | Project evaluation                      |
+| Student       | Project publishing and management       |
+| Company       | Project evaluation and talent discovery |
+
+---
+
+## Technology Stack
+
+### Frontend
+
+* React 18
+* Vite
+* Tailwind CSS
+
+### Backend
+
+* Node.js
+* Express.js
+
+### Database
+
+* MySQL 8
+
+### Authentication
+
+* Firebase Authentication
+* Firebase Admin SDK
+
+### Storage
+
+* Cloudinary
+
+### File Upload
+
+* Multer
+
+### Version Control
+
+* Git
+* GitHub
+
+---
+
+## Security & LGPD Compliance
+
+The platform follows the principles established by the Brazilian General Data Protection Law (LGPD).
+
+### Implemented Measures
+
+* Passwords are never stored in the database
+* Authentication delegated to Firebase
+* Role-based access control
+* Minimal data collection
+* Protected API routes
+* Secure PDF storage
+* Restricted access to academic information
+
+---
+
+## Data Structure
+
+Main entities within the system:
+
+* Users
+* Roles
+* Projects
+* Co-participations
+* Professor Evaluations
+* Company Evaluations
+
+---
+
+## Future Improvements
+
+* Coordinator Dashboard
+* Academic Reports
+* Notification System
+* Signed URLs for PDF protection
+* Federal Revenue CNPJ verification
+* Analytics and institutional metrics
+
+---
+
+## Development Team
+
+* [Gabriel Roberto](https://github.com/GABRIELR48O)
+* [Ibson Gomes](https://github.com/ibsongomes)
+* [Jean Phillip](https://github.com/jean-jpss)
+* [João Victor](https://github.com/jvsantino)
+
+---
+
+## Institution
+
+Centro Universitário SENAC Pernambuco
+
+Technology in Systems Analysis and Development
+
+---
+
+## License
+
+Academic project developed for educational purposes at SENAC Pernambuco.
