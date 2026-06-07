@@ -1,70 +1,111 @@
 # Observatório de Projetos Integradores
 
-Sistema desenvolvido para centralizar, organizar e divulgar os Projetos Integradores acadêmicos da Faculdade Senac, proporcionando um ambiente único para submissão, avaliação e consulta de trabalhos desenvolvidos por alunos.
+> Plataforma acadêmica desenvolvida para centralizar, organizar, avaliar e divulgar Projetos Integradores do Centro Universitário SENAC Pernambuco.
+
+![React](https://img.shields.io/badge/React-18-61DAFB)
+![Node.js](https://img.shields.io/badge/Node.js-Express-339933)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1)
+![Firebase](https://img.shields.io/badge/Firebase-Authentication-FFCA28)
+![Cloudinary](https://img.shields.io/badge/Cloudinary-Storage-3448C5)
+
+---
+
+## Demonstração
+
+Acesse a plataforma:
+
+https://observatorio-pi-blond.vercel.app/
+
+---
 
 ## Sobre o Projeto
 
-Atualmente, todos os Projetos Integradores do Senac são enviados por plataformas descentralizadas, como e-mail e Microsoft Teams, dificultando o gerenciamento, a rastreabilidade e a visibilidade dos trabalhos. O Observatório de Projetos Integradores foi criado para resolver esse problema por meio de uma plataforma centralizada, inspirada no modelo da Plataforma Lattes.
+O Observatório de Projetos Integradores foi desenvolvido para substituir o modelo tradicional de submissão de projetos por e-mail e Microsoft Teams, centralizando todo o processo acadêmico em uma única plataforma.
 
-Cada aluno possui um perfil acadêmico próprio, onde seus projetos ficam publicados e vinculados aos demais participantes da equipe, formando um portfólio digital acadêmico.
+Inspirado na Plataforma Lattes, o sistema permite que cada aluno possua um perfil acadêmico próprio, onde seus projetos são publicados, avaliados e vinculados aos seus coparticipantes.
+
+Além do ambiente acadêmico, a plataforma também conecta empresas aos projetos desenvolvidos pelos alunos, incentivando oportunidades de networking e visibilidade profissional.
+
+---
 
 ## Principais Funcionalidades
 
-### Autenticação e Controle de Acesso:
+### Autenticação e Segurança
 
-* Login seguro utilizando Firebase Authentication;
-* Autenticação baseada em token JWT;
-* Controle de acesso por perfis (RBAC):
+* Login via Firebase Authentication
+* Tokens JWT para autenticação
+* Controle de acesso baseado em papéis (RBAC)
+* Rotas protegidas no frontend e backend
+* Troca obrigatória da senha padrão no primeiro acesso
 
-  * Administrador
-  * Coordenador
-  * Professor
-  * Aluno
+### Área do Aluno
 
-### Área do Administrador:
+* Perfil acadêmico estilo Lattes
+* Publicação de Projetos Integradores
+* Upload de arquivos PDF
+* Edição e exclusão de projetos
+* Visualização inline dos PDFs
+* Consulta de avaliações recebidas
+* Gestão de coparticipações
 
-* Cadastro de usuários;
-* Gerenciamento de perfis;
-* Listagem completa dos usuários cadastrados;
-* Integração automática entre Firebase e banco de dados.
+### Sistema de Coparticipação
 
-### Área do Aluno:
+* Convite de coparticipantes
+* Aceite ou recusa do convite
+* Área "Minhas Participações"
+* Exibição apenas de participantes confirmados
 
-* Perfil acadêmico estilo Lattes;
-* Publicação de projetos;
-* Upload de arquivos PDF;
-* Edição e exclusão de projetos;
-* Associação de coparticipantes;
-* Visualização dos projetos enviados.
+### Área do Professor
 
-### Área do Professor:
+* Listagem completa dos projetos
+* Avaliação por nota (0 a 10)
+* Comentários avaliativos
+* Geração automática de status:
 
-* Visualização de todos os projetos cadastrados;
-* Avaliação de trabalhos;
-* Registro de notas e comentários;
-* Controle automático de status:
+  * 🟢 Aprovado
+  * 🟡 Recuperação
+  * 🔴 Reprovado
 
-  * Aprovado
-  * Recuperação
-  * Reprovado
+### Portal da Empresa
 
-### Visualização de Projetos:
+* Auto-cadastro com CNPJ
+* Validação de CNPJ
+* Aprovação pela coordenação
+* Avaliação de projetos por estrelas (0–5)
+* Comentários sobre projetos
+* Manifestação de interesse
+* Visualização dos contatos dos autores
 
-* Exibição inline de PDFs;
-* Acesso controlado por autenticação;
-* Histórico centralizado de projetos.
+### Administração
+
+* Cadastro de usuários
+* Gerenciamento de perfis
+* Aprovação de empresas
+* Controle institucional da plataforma
+
+---
+
+## Perfis do Sistema
+
+| Perfil        | Responsabilidades                      |
+| ------------- | -------------------------------------- |
+| Administrador | Gerenciamento geral do sistema         |
+| Coordenador   | Aprovação de empresas e acompanhamento |
+| Professor     | Avaliação dos projetos                 |
+| Aluno         | Publicação e gerenciamento de projetos |
+| Empresa       | Avaliação e interesse em projetos      |
 
 ---
 
 ## Tecnologias Utilizadas
 
-### Front-end
+### Frontend
 
 * React 18
 * Vite
 * Tailwind CSS
 
-### Back-end
+### Backend
 
 * Node.js
 * Express.js
@@ -78,66 +119,62 @@ Cada aluno possui um perfil acadêmico próprio, onde seus projetos ficam public
 * Firebase Authentication
 * Firebase Admin SDK
 
+### Armazenamento
+
+* Cloudinary
+
+### Upload de Arquivos
+
+* Multer
+
 ### Controle de Versão
 
 * Git
 * GitHub
 
-### Upload e Visualização
+---
 
-* Multer
-* PDF Viewer (iframe)
+## Segurança e LGPD
+
+O sistema segue os princípios da Lei Geral de Proteção de Dados (LGPD).
+
+### Medidas Implementadas
+
+* Senhas não armazenadas no banco de dados
+* Autenticação delegada ao Firebase
+* Controle de acesso baseado em permissões
+* Coleta mínima de dados
+* Rotas protegidas por autenticação
+* Armazenamento seguro dos PDFs
+* Restrição de acesso às informações acadêmicas
 
 ---
 
-## Estrutura do Sistema
+## Estrutura de Dados
 
-### Perfis de Usuário
+Principais entidades do sistema:
 
-| Perfil        | Permissões                    |
-| ------------- | ----------------------------- |
-| Administrador | Gerenciar usuários e sistema  |
-| Coordenador   | Acompanhamento acadêmico      |
-| Professor     | Avaliar projetos              |
-| Aluno         | Publicar e gerenciar projetos |
-
-### Banco de Dados
-
-O sistema utiliza cinco tabelas principais:
-
-* roles
-* usuarios
-* projetos
-* projeto_alunos
-* avaliacoes
+* Usuários
+* Perfis (Roles)
+* Projetos
+* Coparticipações
+* Avaliações de Professores
+* Avaliações de Empresas
 
 ---
 
-## Segurança
+## Próximas Funcionalidades
 
-O projeto segue os princípios da Lei Geral de Proteção de Dados (LGPD):
-
-* Senhas não são armazenadas no banco de dados;
-* Autenticação delegada ao Firebase;
-* Controle de acesso baseado em permissões;
-* Dados acessados apenas por usuários autorizados;
-* Armazenamento seguro dos arquivos enviados.
-
----
-
-## Funcionalidades Futuras
-
-* Painel da Coordenação;
-* Relatórios acadêmicos;
-* Dashboard com indicadores;
-* Sistema de notificações;
-* Busca avançada de projetos;
-* Área pública para empresas parceiras;
-* Portfólio profissional dos alunos.
+* Dashboard da Coordenação
+* Relatórios acadêmicos
+* Sistema de notificações
+* URLs assinadas para PDFs
+* Integração com Receita Federal para validação de CNPJ
+* Métricas e indicadores institucionais
 
 ---
 
-## Equipe Responsável
+## Equipe
 
 * [Gabriel Roberto](https://github.com/GABRIELR48O)
 * [Ibson Gomes](https://github.com/ibsongomes)
