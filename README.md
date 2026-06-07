@@ -1,5 +1,8 @@
-* [Read in English](
+# 🇺🇸 English | 🇧🇷 Português
+* [Read in English](https://github.com/jvsantino/observatorio-pi/edit/main/README.md#observatory-of-integrative-projects)
 * [Leia em Português](https://github.com/jvsantino/observatorio-pi/edit/main/README.md#observat%C3%B3rio-de-projetos-integradores)
+
+<a>
 
 # Observatório de Projetos Integradores
 
@@ -193,14 +196,16 @@ Projeto acadêmico desenvolvido para fins educacionais no Centro Universitário 
 
 -----
 -----
-# Integrative Projects Observatory
+# Observatory of Integrative Projects
 
 > Academic platform designed to centralize, manage, evaluate and showcase Integrative Projects developed by students at SENAC Pernambuco.
 
 
-
-
-\
+![React](https://img.shields.io/badge/React-18-61DAFB)
+![Node.js](https://img.shields.io/badge/Node.js-Express-339933)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1)
+![Firebase](https://img.shields.io/badge/Firebase-Authentication-FFCA28)
+![Cloudinary](https://img.shields.io/badge/Cloudinary-Storage-3448C5)
 
 ---
 
