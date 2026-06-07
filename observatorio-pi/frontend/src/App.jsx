@@ -43,13 +43,8 @@ function AppRoutes() {
 export default function App() {
   return (
     <BrowserRouter>
-      {/* Coluna de altura total: navbar (auto) + conteúdo (ocupa o resto) */}
-      <div className="h-screen flex flex-col">
-        <Navbar />
-        <main className="flex-1 min-h-0 overflow-y-auto">
-          <AppRoutes />
-        </main>
-      </div>
+      <Navbar />
+      <AppRoutes />
     </BrowserRouter>
   );
-}
+} 
