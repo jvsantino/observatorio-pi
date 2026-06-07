@@ -8,7 +8,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen md:h-[calc(100vh-56px)] flex flex-col md:overflow-hidden" style={{ background: '#f0f4f8' }}>
+    <div className="min-h-screen md:h-[calc(100vh_-_56px)] flex flex-col md:overflow-hidden" style={{ background: '#f0f4f8' }}>
       {/* Hero — ocupa o espaço livre e centraliza o conteúdo */}
       <div style={{ background: '#004A8C' }} className="flex-1 flex flex-col items-center justify-center text-center px-6 py-6">
         <div style={{ background: '#F7941C' }} className="w-14 h-14 lg:w-16 lg:h-16 rounded-full flex items-center justify-center text-white font-bold text-xl lg:text-2xl mb-4 mx-auto">
