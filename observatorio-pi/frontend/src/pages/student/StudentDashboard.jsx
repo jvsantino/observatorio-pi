@@ -261,13 +261,13 @@ export default function StudentDashboard() {
             <div className="space-y-3">
               {convites.map(p => (
                 <div key={p.id} style={{ border: '1px solid #e5e7eb' }} className="rounded-xl p-4">
-                  <div className="flex justify-between items-start">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-start">
                     <div>
                       <h3 style={{ color: '#004A8C' }} className="font-semibold">{p.titulo}</h3>
                       <p className="text-xs text-gray-400 mt-0.5">por {p.autor} · {p.curso} · {p.turma} · {p.periodo}</p>
                       <p className="text-sm text-gray-500 mt-1">{p.descricao}</p>
                     </div>
-                    <div className="flex gap-2 ml-4 flex-shrink-0">
+                    <div className="flex flex-wrap gap-2 sm:ml-4 flex-shrink-0">
                       <button onClick={() => responderConvite(p.id, 'aceitar')}
                         style={{ background: '#E8F5E9', color: '#2E7D32' }}
                         className="text-xs px-3 py-1.5 rounded-lg font-medium hover:opacity-80 transition">Aceitar</button>
@@ -297,7 +297,7 @@ export default function StudentDashboard() {
             <div className="space-y-3">
               {projetos.map(p => (
                 <div key={p.id} style={{ border: '1px solid #e5e7eb' }} className="rounded-xl p-4 hover:border-blue-200 transition">
-                  <div className="flex justify-between items-start">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-start">
                     <div>
                       <h3 style={{ color: '#004A8C' }} className="font-semibold">{p.titulo}</h3>
                       <p className="text-xs text-gray-400 mt-0.5">{p.curso} · {p.turma} · {p.periodo}</p>
@@ -306,7 +306,7 @@ export default function StudentDashboard() {
                         <p className="text-xs text-gray-500 mt-1"><span className="font-medium" style={{ color: '#004A8C' }}>Com:</span> {p.coparticipantes}</p>
                       )}
                     </div>
-                    <div className="flex gap-2 ml-4 flex-shrink-0">
+                    <div className="flex flex-wrap gap-2 sm:ml-4 flex-shrink-0">
                       <button onClick={() => setVisualizando(visualizando === p.id ? null : p.id)}
                         style={{ background: '#E8F0FB', color: '#004A8C' }}
                         className="text-xs px-3 py-1.5 rounded-lg font-medium hover:opacity-80 transition">
@@ -345,13 +345,13 @@ export default function StudentDashboard() {
             <div className="space-y-3">
               {participacoes.map(p => (
                 <div key={p.id} style={{ border: '1px solid #e5e7eb' }} className="rounded-xl p-4 hover:border-blue-200 transition">
-                  <div className="flex justify-between items-start">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-start">
                     <div>
                       <h3 style={{ color: '#004A8C' }} className="font-semibold">{p.titulo}</h3>
                       <p className="text-xs text-gray-400 mt-0.5">por {p.autor} · {p.curso} · {p.turma} · {p.periodo}</p>
                       <p className="text-sm text-gray-500 mt-1">{p.descricao}</p>
                     </div>
-                    <div className="flex gap-2 ml-4 flex-shrink-0">
+                    <div className="flex flex-wrap gap-2 sm:ml-4 flex-shrink-0">
                       <button onClick={() => setVisualizando(visualizando === p.id ? null : p.id)}
                         style={{ background: '#E8F0FB', color: '#004A8C' }}
                         className="text-xs px-3 py-1.5 rounded-lg font-medium hover:opacity-80 transition">

@@ -137,7 +137,7 @@ export default function CompanyDashboard() {
               const cs = contatos[p.id];
               return (
                 <div key={p.id} className="bg-white rounded-2xl shadow-sm p-5">
-                  <div className="flex justify-between items-start">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-start">
                     <div className="flex-1">
                       <h3 style={{ color: '#004A8C' }} className="font-semibold text-lg">{p.titulo}</h3>
                       <p className="text-xs text-gray-400">{p.autor} · {p.curso} · {p.turma} · {p.periodo}</p>
@@ -146,7 +146,7 @@ export default function CompanyDashboard() {
                         <p className="text-xs text-gray-500 mt-1"><span className="font-medium" style={{ color: '#004A8C' }}>Equipe:</span> {p.autor}, {p.coparticipantes}</p>
                       )}
                     </div>
-                    <div className="flex gap-2 ml-4 flex-shrink-0">
+                    <div className="flex flex-wrap gap-2 sm:ml-4 flex-shrink-0">
                       <button onClick={() => setVisualizando(visualizando === p.id ? null : p.id)}
                         style={{ background: '#E8F0FB', color: '#004A8C' }}
                         className="text-xs px-3 py-1.5 rounded-lg font-medium hover:opacity-80 transition">

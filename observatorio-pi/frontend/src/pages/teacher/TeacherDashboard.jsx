@@ -88,7 +88,7 @@ export default function TeacherDashboard() {
               return (
                 <div key={p.id} className="bg-white rounded-2xl shadow-sm overflow-hidden">
                   <div className="p-5">
-                    <div className="flex justify-between items-start">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-start">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           <h3 style={{ color: '#004A8C' }} className="font-semibold text-lg">{p.titulo}</h3>
@@ -99,7 +99,7 @@ export default function TeacherDashboard() {
                           <p className="text-xs text-gray-500 mt-1"><span className="font-medium" style={{ color: '#004A8C' }}>Coparticipantes:</span> {p.coparticipantes}</p>
                         )}
                       </div>
-                      <div className="flex gap-2 ml-4 flex-shrink-0">
+                      <div className="flex flex-wrap gap-2 sm:ml-4 flex-shrink-0">
                         <button
                           onClick={() => setVisualizando(visualizando === p.id ? null : p.id)}
                           style={{ background: '#E8F0FB', color: '#004A8C' }}
