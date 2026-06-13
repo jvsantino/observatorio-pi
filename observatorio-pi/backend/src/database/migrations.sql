@@ -7,12 +7,15 @@ CREATE TABLE IF NOT EXISTS roles (
 );
 
 CREATE TABLE IF NOT EXISTS usuarios (
-  id           INT PRIMARY KEY AUTO_INCREMENT,
-  nome         VARCHAR(100) NOT NULL,
-  email        VARCHAR(100) UNIQUE NOT NULL,
-  firebase_uid VARCHAR(128) UNIQUE NOT NULL,
-  role_id      INT NOT NULL,
-  created_at   DATETIME DEFAULT CURRENT_TIMESTAMP,
+  id                   INT PRIMARY KEY AUTO_INCREMENT,
+  nome                 VARCHAR(100) NOT NULL,
+  email                VARCHAR(100) UNIQUE NOT NULL,
+  firebase_uid         VARCHAR(128) UNIQUE NOT NULL,
+  role_id              INT NOT NULL,
+  cnpj                 VARCHAR(18),
+  aprovado             BOOLEAN DEFAULT TRUE,
+  precisa_trocar_senha BOOLEAN DEFAULT FALSE,
+  created_at           DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (role_id) REFERENCES roles(id)
 );
 
@@ -45,8 +48,21 @@ CREATE TABLE IF NOT EXISTS avaliacoes (
   professor_id INT NOT NULL,
   projeto_id   INT NOT NULL,
   created_at   DATETIME DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uniq_prof_proj (professor_id, projeto_id),
   FOREIGN KEY (professor_id) REFERENCES usuarios(id),
   FOREIGN KEY (projeto_id)   REFERENCES projetos(id)
+);
+
+CREATE TABLE IF NOT EXISTS avaliacoes_empresa (
+  id          INT PRIMARY KEY AUTO_INCREMENT,
+  estrelas    INT NOT NULL,
+  comentario  TEXT,
+  empresa_id  INT NOT NULL,
+  projeto_id  INT NOT NULL,
+  created_at  DATETIME DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uniq_empresa_proj (empresa_id, projeto_id),
+  FOREIGN KEY (empresa_id) REFERENCES usuarios(id),
+  FOREIGN KEY (projeto_id) REFERENCES projetos(id)
 );
 
 -- Papéis iniciais
@@ -54,4 +70,5 @@ INSERT IGNORE INTO roles (id, nome) VALUES
   (1, 'administrador'),
   (2, 'coordenador'),
   (3, 'professor'),
-  (4, 'aluno');
+  (4, 'aluno'),
+  (5, 'empresa');
